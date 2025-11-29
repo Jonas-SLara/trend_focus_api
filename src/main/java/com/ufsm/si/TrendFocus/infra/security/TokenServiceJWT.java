@@ -5,29 +5,33 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.ufsm.si.TrendFocus.model.Usuario;
 
 @Service
 public class TokenServiceJWT {
 
-    @Value("${api.security.token.secret}")
+    @Value("${jwt.secret}")
     private String secret;
     private static final String issuer = "API TrendFocus";
 
-    public String gerarToken(User usuario){
+    public String gerarToken(Usuario usuario){
         try {
             //NUNCA EXPOR O SECRET NO CÓDIGO
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
                 .withIssuer(TokenServiceJWT.issuer)
                 .withSubject(usuario.getUsername())
-                //.withClaim()
+                .withClaim("id", usuario.getId())
+                .withClaim("authorities", usuario.getAuthorities()
+                    .stream()
+                    .map(r -> r.getAuthority())
+                    .toList())
                 .withExpiresAt(dataExpiracao())
                 .sign(algorithm);
         } catch (JWTCreationException exception) {

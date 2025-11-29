@@ -3,7 +3,7 @@ package com.ufsm.si.TrendFocus.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ufsm.si.TrendFocus.dto.request.UsuarioRegisterDTO;
@@ -16,16 +16,18 @@ import com.ufsm.si.TrendFocus.repositories.UsuarioRepository;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
-    private final BCryptPasswordEncoder bCrypt;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository){
+    public UsuarioService(
+        UsuarioRepository usuarioRepository,
+        PasswordEncoder passwordEncoder){
         this.usuarioRepository = usuarioRepository;
-        this.bCrypt = new BCryptPasswordEncoder(12);
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UsuarioDTO salvar(UsuarioRegisterDTO ur){
         Usuario usuario = new Usuario();
-        usuario.setSenha(bCrypt.encode(ur.getSenha()));
+        usuario.setSenha(passwordEncoder.encode(ur.getSenha()));
         usuario.setNome(ur.getNome());
         usuario.setEmail(ur.getEmail());
         usuario.setAtivo(false);

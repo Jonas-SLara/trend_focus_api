@@ -4,7 +4,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ufsm.si.TrendFocus.dto.request.LoginRequestDTO;
 import com.ufsm.si.TrendFocus.dto.response.LoginResponseDTO;
 import com.ufsm.si.TrendFocus.infra.security.TokenServiceJWT;
+import com.ufsm.si.TrendFocus.model.Usuario;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -67,7 +67,7 @@ public class LoginController {
         Authentication authentication = new UsernamePasswordAuthenticationToken(dados.getEmail(), dados.getSenha());
         Authentication aut = manager.authenticate(authentication);
 
-        User usuario = (User) aut.getPrincipal();
+        Usuario usuario = (Usuario) aut.getPrincipal();
         String token = tokenServiceJWT.gerarToken(usuario);
 
         return ResponseEntity.ok(new LoginResponseDTO(token));

@@ -17,17 +17,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private static final String[] SWAGGER_WHITELIST = {
+        "/swagger-resources/**",
+        "/swagger-ui.html",
+        "/swagger-ui/**",
+        "/v3/api-docs/**",
+        "/api-docs/**",
+        "/webjars/**"
+    };
     
     private final SecurityFilter securityFilter;
 
     public SecurityConfig(SecurityFilter filtro){
         this.securityFilter = filtro;
     }
-
-    /*
-     * Define como o spring security protege as requisições http
-     * construindo uma pipeline de filtros e regras para cada requisição
-     */
+   
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -46,31 +50,19 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/noticia", "/noticia/**").permitAll()
                 .requestMatchers(HttpMethod.DELETE, "/noticia").hasAnyRole("ADM", "ANALISTA")
                 .requestMatchers(HttpMethod.POST, "/noticia").hasAnyRole("ADM", "ANALISTA")
-                .requestMatchers(
-                    "/swagger-ui.html",
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**",
-                    "/api-docs/**",
-                    "/webjars/**"
-                ).permitAll()
+                .requestMatchers(SWAGGER_WHITELIST).permitAll()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
     }
 
-    /* Este método retorna uma instância de AuthenticationManager.
-     * Essa instância é utilizada pelo Spring Security para realizar a
-     * autenticação de um usuário. */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
             throws Exception{
         return config.getAuthenticationManager();
     }
 
-    /* passwordEncoder(): Este método retorna uma instância de PasswordEnconder
-     * que é utilizada pelo Spring Security para codificar as senhas dos usuários
-     * de forma segura, */
     @Bean
     public PasswordEncoder passwordEncoder() throws Exception{
         return new BCryptPasswordEncoder();

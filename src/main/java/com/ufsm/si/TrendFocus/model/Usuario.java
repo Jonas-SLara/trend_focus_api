@@ -62,20 +62,11 @@ public class Usuario implements UserDetails{
     @Enumerated(EnumType.STRING)
     private Role tipo;
 
-    /**
-     * getAuthorities()
-     * Retorna as permissões (roles) do usuário no formato que o Spring entende.
-     * 
-     * O Spring usa objetos do tipo GrantedAuthority para representar "papéis"
-     * Exemplo: ROLE_ADM, ROLE_ANALISTA
-     */
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(this.tipo.name()));
     }
 
-    /*Retorna a senha já criptografada*/
     @Override
     public String getPassword() {
         return this.senha;
