@@ -24,10 +24,9 @@ public class SpringDocConfig {
 
     private SecurityScheme securityScheme(){
         return new SecurityScheme()
-            .name("jwt_auth")
-            .scheme("bearer")
             .type(SecurityScheme.Type.HTTP)
-            .in(SecurityScheme.In.HEADER);
+            .scheme("bearer")
+            .bearerFormat("JWT");
     }
 
     private Contact getContact(){

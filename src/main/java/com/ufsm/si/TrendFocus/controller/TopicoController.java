@@ -9,6 +9,7 @@ import com.ufsm.si.TrendFocus.dto.request.TopicoRequestDTO;
 import com.ufsm.si.TrendFocus.dto.response.TopicoResponseDTO;
 import com.ufsm.si.TrendFocus.service.TopicoService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -46,7 +47,8 @@ public class TopicoController {
         return ResponseEntity.ok().body(topicoService.listar(pageable));
     }
 
-    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Salar um Novo Tópico")
+    @SecurityRequirement(name = "jwt_auth")
     @PostMapping
     public ResponseEntity<TopicoResponseDTO> salvar(
             @RequestBody @Valid TopicoRequestDTO novo,
@@ -59,7 +61,8 @@ public class TopicoController {
         return ResponseEntity.created(location).body(topico);
     }
     
-    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Deletar uma Nova Notícia")
+    @SecurityRequirement(name = "jwt_auth")
     @DeleteMapping
     public ResponseEntity<?> deletar(@RequestParam String nome){
         topicoService.deletar(nome);

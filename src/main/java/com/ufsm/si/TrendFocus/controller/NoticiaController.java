@@ -9,6 +9,7 @@ import com.ufsm.si.TrendFocus.dto.response.NoticiaResponseDTO;
 import com.ufsm.si.TrendFocus.model.enums.AreaConhecimentoEnum;
 import com.ufsm.si.TrendFocus.service.NoticiaService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -53,7 +54,7 @@ public class NoticiaController {
         return ResponseEntity.ok().body(page);
     }
 
-     @GetMapping("/analise")
+    @GetMapping("/analise")
     public ResponseEntity<List<AnaliseAreaTermoResponseDTO>> analisar(
         @RequestParam LocalDateTime inicio
     ) {
@@ -74,14 +75,16 @@ public class NoticiaController {
     }
     
 
-    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Salvar Uma Nova Noticia")
+    @SecurityRequirement(name = "jwt_auth")
     @PostMapping
     public ResponseEntity<NoticiaResponseDTO> salvar(@RequestBody @Valid NoticiaRegisterDTO dto ) {
         NoticiaResponseDTO noticia = this.noticiaService.salvar(dto);
         return ResponseEntity.ok().body(noticia);
     }
     
-    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Deletar uma Noticia Antiga")
+    @SecurityRequirement(name = "jwt_auth")
     @DeleteMapping ResponseEntity<?> deletar(@RequestParam Long id){
         this.noticiaService.deletar(id);
         return ResponseEntity.noContent().build();

@@ -10,6 +10,7 @@ import com.ufsm.si.TrendFocus.dto.response.TermoResponseDTO;
 import com.ufsm.si.TrendFocus.model.enums.AreaConhecimentoEnum;
 import com.ufsm.si.TrendFocus.service.TermoService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -41,6 +42,7 @@ public class TermoController {
         this.termoService = termoService;
     }
 
+    @Operation(summary = "listar todos os termos seguindo filtros de area opcional")
     @GetMapping
     public ResponseEntity<Page<TermoResponseDTO>> listar(
             @RequestParam(required = false) AreaConhecimentoEnum area,
@@ -50,7 +52,8 @@ public class TermoController {
         );
     }
     
-    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "salvar um novo termo")
+    @SecurityRequirement(name = "jwt_auth")
     @PostMapping
     public ResponseEntity<TermoResponseDTO> salvar(
             @RequestBody @Valid TermoRequestDTO novo,
@@ -65,7 +68,8 @@ public class TermoController {
         return ResponseEntity.created(location).body(termo);
     }
 
-    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "deletar um termo")
+    @SecurityRequirement(name = "jwt_auth")
     @DeleteMapping
     public ResponseEntity<?> deletar(@RequestParam String nome){
         termoService.deletar(nome);

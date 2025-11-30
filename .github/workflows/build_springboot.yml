@@ -1,0 +1,24 @@
+name: Build Spring Boot
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clona repositorio
+        uses: actions/checkout@v4
+
+      - name: Set Up do JDK21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+      
+      - name: Build with Maven
+        run: mvn -B -q clean verify
