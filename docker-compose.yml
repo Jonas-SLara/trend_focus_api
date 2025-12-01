@@ -3,11 +3,11 @@ services:
     image: postgres:17
     container_name: db_trendfocus
     ports: 
-      - "5001:5432"
+      - "5433:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
-      POSTGRES_DB: trendfocus
+      POSTGRES_DB: POOW2
     networks:
       - db_trendfocus
     healthcheck:

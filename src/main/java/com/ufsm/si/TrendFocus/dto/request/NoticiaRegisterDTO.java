@@ -23,7 +23,7 @@ public class NoticiaRegisterDTO {
     @NotBlank
     private String resumo;
     
-    @Schema(description = "data que foi publicada", example = "2025-10-27T03:54:05.785Z")
+    @Schema(description = "data que foi publicada", example = "2025-10-27T03:54:05")
     private LocalDateTime dataPublicacao;
     
     @Schema(description = "fonte de pesquisa de onde veio a noticia", example = "el pais")
@@ -44,7 +44,7 @@ public class NoticiaRegisterDTO {
 
     @Schema(
         description = "lista de ids de termos para a noticia",
-        examples = {"1", "2","3"}
+        examples = "[1, 2, 3]"
     )
     //será passado uma lista de termos chaves
     private List<Long> termoId; 
